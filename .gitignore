@@ -58,3 +58,6 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+# Epic Online Services Credential
+Assets/ScriptableObjects/EOSSettings.asset
+Assets/ScriptableObjects/EOSSettings.asset.meta
