@@ -3,7 +3,7 @@ using UnityEngine;
 using Epic.OnlineServices;
 using Epic.OnlineServices.Connect;
 
-namespace eoschat
+namespace EOSExt
 {
     /// <summary>
     /// ConnectInterface 拡張

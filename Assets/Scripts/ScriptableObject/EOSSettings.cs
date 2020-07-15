@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-namespace eoschat
+namespace EOSCommon
 {
     /// <summary>
     /// EOS の設定情報

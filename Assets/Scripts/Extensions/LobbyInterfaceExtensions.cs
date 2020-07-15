@@ -4,7 +4,7 @@ using Epic.OnlineServices;
 using Epic.OnlineServices.Connect;
 using Epic.OnlineServices.Lobby;
 
-namespace eoschat
+namespace EOSExt
 {
     /// <summary>
     /// LobbyInterface 拡張

@@ -1,4 +1,6 @@
 ﻿using Cysharp.Threading.Tasks;
+using EOSCommon;
+using EOSExt;
 using Epic.OnlineServices;
 using Epic.OnlineServices.Lobby;
 using Epic.OnlineServices.P2P;
@@ -7,7 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace eoschat
+namespace EOSFps
 {
     /// <summary>
     /// EOS の P2P でチャット

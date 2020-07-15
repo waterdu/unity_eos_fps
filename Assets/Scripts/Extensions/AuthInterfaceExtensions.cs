@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Epic.OnlineServices;
 
-namespace eoschat
+namespace EOSExt
 {
     /// <summary>
     /// AuthInterface 拡張

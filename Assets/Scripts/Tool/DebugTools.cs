@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace eoschat
+namespace EOSExt
 {
     /// <summary>
     /// デバッグ用ツール 拡張

@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 
 
-namespace eoschat
+namespace EOSCommon
 {
     /// <summary>
     /// EOS メイン

@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine.Events;
 using UnityEngine;
 
-namespace eoschat
+namespace EOSExt
 {
     /// <summary>
     /// MonoBehaviour 拡張

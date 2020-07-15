@@ -1,7 +1,7 @@
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-namespace eoschat
+namespace EOSExt
 {
     /// <summary>
     /// TMP_InputField 拡張

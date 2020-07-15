@@ -3,7 +3,7 @@ using UnityEngine;
 using Epic.OnlineServices;
 using Epic.OnlineServices.Lobby;
 
-namespace eoschat
+namespace EOSExt
 {
     /// <summary>
     /// LobbySearch 拡張

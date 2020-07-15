@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace eoschat
+namespace EOSExt
 {
     /// <summary>
     /// string 拡張

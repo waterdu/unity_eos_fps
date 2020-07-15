@@ -2,7 +2,7 @@
 using Epic.OnlineServices;
 using Epic.OnlineServices.P2P;
 
-namespace eoschat
+namespace EOSExt
 {
     /// <summary>
     /// P2PInterface 拡張
