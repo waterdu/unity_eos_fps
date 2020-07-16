@@ -15,6 +15,7 @@ namespace App
 
         public Rigidbody rigid = null;
         public Camera camera = null;
+        public Gun gun = null;
 
         State _state = State.JUMPING;
         Vector3 _prevMouseXy = default;
@@ -69,12 +70,12 @@ namespace App
             Debug.LogError(dXy);
             var bodyEu = transform.localRotation.eulerAngles;
             bodyEu.x = 0f;
-            bodyEu.y += Input.GetAxis("Mouse X") / 2f;
+            bodyEu.y += Input.GetAxis("Mouse X") / 2f / Screen.width * 4000;
             bodyEu.z = 0f;
             transform.localRotation = Quaternion.Euler(bodyEu);
 
             var camEu = camera.transform.localRotation.eulerAngles;
-            camEu.x -= Input.GetAxis("Mouse Y") / 2f;
+            camEu.x -= Input.GetAxis("Mouse Y") / 2f / Screen.height * 4000;
             if (dXy.y > 0 && (camEu.x < -90f && camEu.x > -180f || camEu.x < 270f && camEu.x > 180f))
             {
                 camEu.x = 271f;
@@ -86,15 +87,27 @@ namespace App
             camera.transform.localRotation = Quaternion.Euler(camEu);
 
             _prevMouseXy = mouseXy;
+
+
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                gun.Fire();
+            }
         }
 
-        void OnCollisionEnter(Collision collision)
+        void OnCollisionEnter(Collision col)
         {
+            if (col.gameObject.GetComponent<Bullet>() != null)
+            {
+                Destroy(this.gameObject);
+                return;
+            }
             _state = State.LANDING;
             _colCount++;
         }
 
-        void OnCollisionExit(Collision collision)
+        void OnCollisionExit(Collision col)
         {
             _state = State.JUMPING;
             _colCount--;
