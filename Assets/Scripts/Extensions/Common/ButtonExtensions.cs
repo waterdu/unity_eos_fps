@@ -1,7 +1,7 @@
 using UnityEngine.UI;
 using UnityEngine.Events;
 
-namespace EOSExt
+namespace Oka.Common
 {
     /// <summary>
     /// TMP_InputField 拡張

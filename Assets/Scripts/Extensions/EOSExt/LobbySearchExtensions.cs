@@ -2,8 +2,9 @@
 using UnityEngine;
 using Epic.OnlineServices;
 using Epic.OnlineServices.Lobby;
+using Oka.Common;
 
-namespace EOSExt
+namespace Oka.EOSExt
 {
     /// <summary>
     /// LobbySearch 拡張

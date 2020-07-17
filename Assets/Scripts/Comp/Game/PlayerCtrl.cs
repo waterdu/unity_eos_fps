@@ -1,10 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using Oka.Common;
+using System.Collections.Generic;
 using UnityEngine;
 
 
 namespace App
 {
-    public class PlayerCtrl : MonoBehaviour
+    /// <summary>
+    /// Character control from login user input;
+    /// </summary>
+    public class PlayerCtrl : CtrlBase
     {
         enum State
         {
@@ -13,13 +17,7 @@ namespace App
             JUMPING,
         }
 
-        public Rigidbody rigid = null;
-        public Camera camera = null;
-        public Gun gun = null;
-
-        State _state = State.JUMPING;
         Vector3 _prevMouseXy = default;
-        int _colCount = 0;
 
         void Start()
         {
@@ -29,45 +27,41 @@ namespace App
         void Update()
         {
             var isMove = false;
-            var vec = Vector3.zero;
+            var chrPos = chr.GetPosition();
+            var speed = 5; // TODO Temp
             if (Input.GetKey(KeyCode.W))
             {
                 isMove = true;
-                vec += transform.forward;
+                chrPos += chr.transform.forward * Time.deltaTime * speed;
             }
             if (Input.GetKey(KeyCode.S))
             {
                 isMove = true;
-                vec += transform.forward * -1;
+                chrPos += chr.transform.forward * -1 * Time.deltaTime * speed;
             }
             if (Input.GetKey(KeyCode.D))
             {
                 isMove = true;
-                vec += transform.right;
+                chrPos += chr.transform.right * Time.deltaTime * speed;
             }
             if (Input.GetKey(KeyCode.A))
             {
                 isMove = true;
-                vec += transform.right * -1;
+                chrPos += chr.transform.right * -1 * Time.deltaTime * speed;
             }
             if (isMove)
             {
-                vec.y = 0f;
-                vec = vec.normalized * Time.deltaTime * 5;
-                transform.position += vec;
+                chr.SetPosition(chrPos);
             }
 
-            if (_colCount == 1)
+            if (chr.state == MoveState.LANDING)
             {
                 if (Input.GetKey(KeyCode.Space))
                 {
-                    rigid.AddForce(Vector3.up * 50, ForceMode.Acceleration);
+                    chr.Jump();
                 }
             }
 
-            var mouseXy = Input.mousePosition;
-            var dXy = mouseXy - _prevMouseXy;
-            Debug.LogError(dXy);
             var bodyEu = transform.localRotation.eulerAngles;
             bodyEu.x = 0f;
             bodyEu.y += Input.GetAxis("Mouse X") / 2f / Screen.width * 4000;
@@ -111,12 +105,6 @@ namespace App
         {
             _state = State.JUMPING;
             _colCount--;
-        }
-
-        void Reset()
-        {
-            rigid = gameObject.GetComponent<Rigidbody>();
-            camera = gameObject.GetComponentInChildren<Camera>();
         }
     }
 }

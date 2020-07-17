@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace EOSExt
+namespace Oka.Common
 {
     /// <summary>
     /// デバッグ用ツール 拡張

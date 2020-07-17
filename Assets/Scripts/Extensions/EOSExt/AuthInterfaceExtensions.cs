@@ -3,8 +3,9 @@ using Epic.OnlineServices.Auth;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Epic.OnlineServices;
+using Oka.Common;
 
-namespace EOSExt
+namespace Oka.EOSExt
 {
     /// <summary>
     /// AuthInterface 拡張

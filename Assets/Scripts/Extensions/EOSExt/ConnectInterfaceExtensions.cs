@@ -2,8 +2,9 @@
 using UnityEngine;
 using Epic.OnlineServices;
 using Epic.OnlineServices.Connect;
+using Oka.Common;
 
-namespace EOSExt
+namespace Oka.EOSExt
 {
     /// <summary>
     /// ConnectInterface 拡張

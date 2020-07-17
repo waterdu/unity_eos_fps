@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace EOSExt
+namespace Oka.Common
 {
     /// <summary>
     /// string 拡張

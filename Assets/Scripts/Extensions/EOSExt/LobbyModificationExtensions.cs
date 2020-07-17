@@ -3,8 +3,9 @@ using UnityEngine;
 using Epic.OnlineServices;
 using Epic.OnlineServices.Connect;
 using Epic.OnlineServices.Lobby;
+using Oka.Common;
 
-namespace EOSExt
+namespace Oka.EOSExt
 {
     /// <summary>
     /// LobbyModification 拡張

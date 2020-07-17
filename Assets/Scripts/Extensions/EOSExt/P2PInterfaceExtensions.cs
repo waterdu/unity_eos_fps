@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using Epic.OnlineServices;
 using Epic.OnlineServices.P2P;
+using Oka.Common;
 
-namespace EOSExt
+namespace Oka.EOSExt
 {
     /// <summary>
     /// P2PInterface 拡張
