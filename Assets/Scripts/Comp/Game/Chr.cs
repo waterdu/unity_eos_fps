@@ -11,27 +11,28 @@ namespace App
         public Camera camera = null;
         public Gun gun = null;
         public MoveState state = MoveState.JUMPING;
+        public bool isDamage = false;
 
         Vector3 _prevMouseXy = default;
         int _colCount = 0;
 
         /// <summary>
-        /// Chara and Camera Transform update
+        /// Character Manipulate 
         /// </summary>
         /// <param name="chrPos">Chara Position</param>
         /// <param name="chrRot">Chara Rotation</param>
         /// <param name="cameraRot">Camera Rotation</param>
-        public void UpdateTransform(Vector3 chrPos, Quaternion chrRot, Quaternion cameraRot)
+        /// <param name="isFire">true : Gun Fire</param>
+        public void Manipulate(Vector3 chrPos, Quaternion chrRot, Quaternion cameraRot, bool isFire)
         {
-            transform.position = chrPos;
-            transform.rotation = chrRot;
-            camera.transform.rotation = cameraRot;
+            transform.localPosition = chrPos;
+            transform.localRotation = chrRot;
+            camera.transform.localRotation = cameraRot;
+            if (isFire)
+            {
+                gun.Fire();
+            }
         }
-
-        /// <summary>
-        /// Gun Fire
-        /// </summary>
-        public void Fire() => gun.Fire();
 
         public void Jump()
         {
@@ -46,8 +47,7 @@ namespace App
         {
             if (col.gameObject.GetComponent<Bullet>() != null)
             {
-                Destroy(this.gameObject);
-                return;
+                isDamage = true;
             }
             state = MoveState.LANDING;
             _colCount++;

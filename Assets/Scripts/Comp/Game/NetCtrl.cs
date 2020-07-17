@@ -10,24 +10,15 @@ namespace App
     /// </summary>
     public class NetCtrl : Ctrl
     {
-        /// <summary>
-        /// First frame
-        /// </summary>
-        void Start()
+
+        public override void Initialize()
         {
-            // Not use Rigidbody;
-            chr.GetComponent<Rigidbody>().DestroyNotNull();
         }
 
         /// <summary>
         /// Every frame
         /// </summary>
-        void Update()
-        {
-
-        }
-
-        protected override void Sync()
+        public override void Tick()
         {
         }
     }

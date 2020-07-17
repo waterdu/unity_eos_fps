@@ -49,5 +49,12 @@ namespace Oka.Common
         /// <param name="mono">MonoBehaviour</param>
         /// <param name="rot">Global Rotation</param>
         public static void SetRotation(this MonoBehaviour mono, Quaternion rot) => mono.transform.rotation = rot;
+
+        /// <summary>
+        /// GameObject Destroy if not null. 
+        /// </summary>
+        /// <param name="mono">MonoBehaviour</param>
+        /// <returns>RectTransform</returns>
+        public static void DestroyNotNull(this MonoBehaviour mono) => mono.gameObject.DestroyNotNull();
     }
 }

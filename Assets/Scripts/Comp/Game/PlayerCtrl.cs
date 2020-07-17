@@ -1,5 +1,6 @@
 ﻿using Oka.Common;
 using System.Collections.Generic;
+using System.IO.IsolatedStorage;
 using UnityEngine;
 
 
@@ -10,22 +11,26 @@ namespace App
     /// </summary>
     public class PlayerCtrl : Ctrl
     {
-        enum State
+        public int hp = 0;
+
+        public override void Initialize()
         {
-            NONE = 0,
-            LANDING,
-            JUMPING,
+            hp = 3;
         }
 
-        Vector3 _prevMouseXy = default;
-
-        void Start()
+        public override void Tick()
         {
-            _prevMouseXy = Input.mousePosition;
-        }
+            if (chr.isDamage)
+            {
+                hp--;
+                if (hp == 0)
+                {
+                    chr.DestroyNotNull();
+                }
+                chr.isDamage = false;
+            }
 
-        void Update()
-        {
+
             var isMove = false;
             var chrPos = chr.GetPosition();
             var speed = 5; // TODO Temp
@@ -54,39 +59,43 @@ namespace App
                 chr.SetPosition(chrPos);
             }
 
+            var dx = Input.GetAxis("Mouse X") / 2f / Screen.width * 4000;
+            var dy = Input.GetAxis("Mouse Y") / 2f / Screen.height * 4000;
+
+            var bodyEu = chr.transform.localRotation.eulerAngles;
+            bodyEu.x = 0f;
+            bodyEu.y += dx;
+            bodyEu.z = 0f;
+            var bodyRot = Quaternion.Euler(bodyEu);
+
+            var camEu = chr.camera.transform.localRotation.eulerAngles;
+            camEu.x -= dy;
+            camEu.y = 0;
+            camEu.z = 0;
+            if (dy > 0 && (camEu.x < -90f && camEu.x > -180f || camEu.x < 270f && camEu.x > 180f))
+            {
+                camEu.x = 271f;
+            }
+            else if (dy < 0 && camEu.x > 90f && camEu.x < 180f)
+            {
+                camEu.x = 89f;
+            }
+            var camRot = Quaternion.Euler(camEu);
+
+            var isFire = false;
+            if (Input.GetMouseButtonDown(0))
+            {
+                isFire = true;
+            }
+            chr.Manipulate(chrPos, bodyRot, camRot, isFire);
+
+
             if (chr.state == MoveState.LANDING)
             {
                 if (Input.GetKey(KeyCode.Space))
                 {
                     chr.Jump();
                 }
-            }
-
-            var bodyEu = transform.localRotation.eulerAngles;
-            bodyEu.x = 0f;
-            bodyEu.y += Input.GetAxis("Mouse X") / 2f / Screen.width * 4000;
-            bodyEu.z = 0f;
-            transform.localRotation = Quaternion.Euler(bodyEu);
-
-            var camEu = camera.transform.localRotation.eulerAngles;
-            camEu.x -= Input.GetAxis("Mouse Y") / 2f / Screen.height * 4000;
-            if (dXy.y > 0 && (camEu.x < -90f && camEu.x > -180f || camEu.x < 270f && camEu.x > 180f))
-            {
-                camEu.x = 271f;
-            }
-            else if (dXy.y < 0 && camEu.x > 90f && camEu.x < 180f)
-            {
-                camEu.x = 89f;
-            }
-            camera.transform.localRotation = Quaternion.Euler(camEu);
-
-            _prevMouseXy = mouseXy;
-
-
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                chr.Fire();
             }
         }
     }

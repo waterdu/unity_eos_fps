@@ -16,19 +16,26 @@ namespace App
         {
             foreach (var ctrl in list)
             {
-                ctrl.Sync();
-
                 if (ctrl.chr == null)
                 {
                     ctrl.Spawn();
                 }
+                ctrl.Tick();
             }
         }
 
         public static void GeneratePlayer() => list.Add(new PlayerCtrl());
 
-        public void Spawn() => chr = Object.Instantiate(chrPrefab);
+        public void Spawn()
+        {
+            Initialize();
 
-        protected abstract void Sync();
+            chr = Object.Instantiate(App.chrPrefab);
+            chr.transform.localPosition = new Vector3(Random.Range(1, 3), 1, Random.Range(1, 3));
+        }
+
+        public abstract void Initialize();
+
+        public abstract void Tick();
     }
 }
