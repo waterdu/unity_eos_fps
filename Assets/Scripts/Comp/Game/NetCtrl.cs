@@ -8,10 +8,8 @@ namespace App
     /// <summary>
     /// Character Control from network;
     /// </summary>
-    public class NetCtrl : CtrlBase
+    public class NetCtrl : Ctrl
     {
-        static List<NetCtrl> list = new List<NetCtrl>();
-
         /// <summary>
         /// First frame
         /// </summary>
@@ -27,6 +25,10 @@ namespace App
         void Update()
         {
 
+        }
+
+        protected override void Sync()
+        {
         }
     }
 }

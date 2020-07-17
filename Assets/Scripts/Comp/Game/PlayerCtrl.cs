@@ -8,7 +8,7 @@ namespace App
     /// <summary>
     /// Character control from login user input;
     /// </summary>
-    public class PlayerCtrl : CtrlBase
+    public class PlayerCtrl : Ctrl
     {
         enum State
         {
@@ -86,25 +86,8 @@ namespace App
 
             if (Input.GetMouseButtonDown(0))
             {
-                gun.Fire();
+                chr.Fire();
             }
-        }
-
-        void OnCollisionEnter(Collision col)
-        {
-            if (col.gameObject.GetComponent<Bullet>() != null)
-            {
-                Destroy(this.gameObject);
-                return;
-            }
-            _state = State.LANDING;
-            _colCount++;
-        }
-
-        void OnCollisionExit(Collision col)
-        {
-            _state = State.JUMPING;
-            _colCount--;
         }
     }
 }
