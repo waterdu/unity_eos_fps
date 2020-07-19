@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 namespace Oka.Common
 {
     /// <summary>
-    /// string 拡張
+    /// string extension
     /// </summary>
     public static class StringExtensions
     {

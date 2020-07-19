@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace App
+namespace Oka.App
 {
     public class App : MonoBehaviour
     {
@@ -13,10 +13,6 @@ namespace App
         void Start()
         {
             ins = this;
-            Cursor.lockState = CursorLockMode.Confined;
-            Cursor.visible = false;
-            Ctrl.GeneratePlayer();
-            Ctrl.GeneratePlayer();
         }
 
         void Update()

@@ -1,4 +1,4 @@
-﻿namespace App
+﻿namespace Oka.App
 {
     /// <summary>
     /// Character Move State

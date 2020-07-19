@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
+using Oka.Common;
 
-namespace App
+namespace Oka.App
 {
     /// <summary>
     /// Character Compoonent
@@ -8,13 +9,10 @@ namespace App
     public class Chr : MonoBehaviour
     {
         public Rigidbody rigid = null;
-        public Camera camera = null;
+        public new Camera camera = null;
         public Gun gun = null;
         public MoveState state = MoveState.JUMPING;
         public bool isDamage = false;
-
-        Vector3 _prevMouseXy = default;
-        int _colCount = 0;
 
         /// <summary>
         /// Character Manipulate 
@@ -23,11 +21,12 @@ namespace App
         /// <param name="chrRot">Chara Rotation</param>
         /// <param name="cameraRot">Camera Rotation</param>
         /// <param name="isFire">true : Gun Fire</param>
-        public void Manipulate(Vector3 chrPos, Quaternion chrRot, Quaternion cameraRot, bool isFire)
+        public void Manipulate(Vector3 chrPos, float chrRot, float cameraRot, bool isFire)
         {
             transform.localPosition = chrPos;
-            transform.localRotation = chrRot;
-            camera.transform.localRotation = cameraRot;
+            transform.localEulerAngles = new Vector3(0, chrRot, 0);
+            camera.transform.localEulerAngles = new Vector3(cameraRot, 0, 0);
+            Debug.LogError(cameraRot);
             if (isFire)
             {
                 gun.Fire();
@@ -50,7 +49,6 @@ namespace App
                 isDamage = true;
             }
             state = MoveState.LANDING;
-            _colCount++;
         }
 
         /// <summary>
@@ -60,7 +58,6 @@ namespace App
         void OnCollisionExit(Collision col)
         {
             state = MoveState.JUMPING;
-            _colCount--;
         }
 
         void Reset()

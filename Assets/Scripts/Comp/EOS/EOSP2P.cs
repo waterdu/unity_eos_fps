@@ -1,88 +1,107 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using Oka.App;
+using Cysharp.Threading.Tasks;
 using EOSCommon;
-using Epic.OnlineServices;
+using Epic.OnlineServices.Auth;
 using Epic.OnlineServices.Lobby;
-using Epic.OnlineServices.P2P;
 using Oka.Common;
 using Oka.EOSExt;
-using System.Text;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
+using Epic.OnlineServices;
 
 namespace EOSFps
 {
     /// <summary>
-    /// EOS の P2P でチャット
+    /// P2P Processing
     /// </summary>
     public class EOSP2P : MonoBehaviour
     {
-        public TMP_InputField inptDevPort = null;
-        public TMP_InputField inptDevName = null;
-        public Button btnLogin = null;
-
-        public CanvasGroup lobbyRoot = null;
-        public Button btnCreateLobby = null;
-        public TMP_InputField inptLobbyId = null;
-        public Button btnSearchLobby = null;
-
-        public CanvasGroup p2pRoot = null;
-        public TMP_InputField inptSocketId = null;
-        public TMP_InputField inptChannelId = null;
-
-        public CanvasGroup chatRoot = null;
-        public TMP_InputField inptSendMsg = null;
-        public Button btnSend = null;
-        public TMP_InputField inptRecMsg = null;
-
-        ProductUserId m_localUserId = null;
-        ProductUserId m_targetUserId = null;
-        string m_joinLobbyId = null;
+        static EOSP2P _ins = null;
 
         /// <summary>
-        /// 開始
+        /// Start
         /// </summary>
         void Start()
         {
-            btnLogin.SetOnClick(() => _Login().Forget());
-            btnCreateLobby.SetOnClick(() => _CreateLobby().Forget());
-            btnSearchLobby.SetOnClick(() => _JoinLobby().Forget());
-            btnSend.SetOnClick(_Send);
+            _ins = this;
         }
 
         /// <summary>
-        /// 更新
+        /// Update
         /// </summary>
         void Update()
         {
-            var p2p = EOSComponent.p2p;
+            var p2p = EOS.p2p;
 
-            lobbyRoot.alpha = m_localUserId != null ? 1 : 0;
-            p2pRoot.alpha = m_joinLobbyId != null ? 1 : 0;
-            chatRoot.alpha = m_joinLobbyId != null ? 1 : 0;
-
-            var size = p2p.GetNextReceivedPacketSize(m_localUserId, inptChannelId.text.ToByte());
-            if (size > 0)
+            var playerUserId = PlayerCtrl.userId;
+            if (playerUserId != null)
             {
-                var (_, _, _, rawData, _) = p2p.ReceivePacket(m_localUserId, size, inptChannelId.text.ToByte());
-                var rec = Encoding.UTF8.GetString(rawData);
-                inptRecMsg.text = $"{rec}\n{inptRecMsg.text}";
+                var size = p2p.GetNextReceivedPacketSize(playerUserId, EOS.channelId);
+                if (size > 0)
+                {
+                    var (remoteUserId, _, _, rawData, _) = p2p.ReceivePacket(playerUserId, size, EOS.channelId);
+                    Ctrl.idToCtrl[remoteUserId].ReceivePacket(MarshalTools.Deserialize<PacketData>(rawData));
+                }
             }
         }
 
         /// <summary>
-        /// ログイン
+        /// Login by EOS Dev Auth Tool
         /// </summary>
-        /// <returns>タスク</returns>
-        async UniTask _Login()
+        /// <returns>Task</returns>
+        public static async UniTask LoginDev(int devPort, string devName)
         {
-            var auth = EOSComponent.auth;
-            var con = EOSComponent.connect;
-            var authRes = await auth.Login(Epic.OnlineServices.Auth.LoginCredentialType.Developer, $"localhost:{inptDevPort.text}", inptDevName.text);
+            var auth = EOS.auth;
+            var authRes = await auth.Login(LoginCredentialType.Developer, $"localhost:{devPort}", devName);
             if (authRes == null)
             {
                 return;
             }
+
+            await _Login(authRes);
+        }
+
+
+        /// <summary>
+        /// Login by browser auth
+        /// </summary>
+        /// <returns>Task</returns>
+        public static async UniTask LoginAuth()
+        {
+            var auth = EOS.auth;
+
+            var refreshToken = SaveDataUtils.GetString(Defines.KEY_REFRESH_TOKEN);
+            LoginCallbackInfo authRes = null;
+            if (refreshToken.IsNullOrEmpty())
+            {
+                authRes = await auth.Login(LoginCredentialType.AccountPortal, string.Empty, string.Empty);
+                if (authRes == null)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                authRes = await auth.Login(LoginCredentialType.RefreshToken, string.Empty, refreshToken);
+                if (authRes == null)
+                {
+                    return;
+                }
+            }
+
+            await _Login(authRes);
+        }
+
+        /// <summary>
+        /// Login by browser auth
+        /// </summary>
+        /// <returns>Task</returns>
+        static async UniTask _Login(LoginCallbackInfo authRes)
+        {
+            var auth = EOS.auth;
+            var con = EOS.connect;
 
             var token = auth.CopyUserAuthToken(authRes.LocalUserId);
             if (token == null)
@@ -96,96 +115,172 @@ namespace EOSFps
                 return;
             }
 
-            m_localUserId = conRes.LocalUserId;
+            SaveDataUtils.SaveString(Defines.KEY_REFRESH_TOKEN, token.RefreshToken);
+            var playerId = conRes.LocalUserId;
+
+            Ctrl.GeneratePlayer(playerId);
+
+            await _ins._JoinLobby();
         }
 
         /// <summary>
-        /// ロビー作成
+        /// Join Lobby 
         /// </summary>
-        /// <returns>タスク</returns>
+        /// <returns>Task</returns>
+        async UniTask _JoinLobby()
+        {
+            var lobby = EOS.lobby;
+
+
+            // Get Lobby ID 
+            // TODO Lobby search on EOS is not working properly.
+            EOS.lobbyId = await _GetLobbyId();
+
+            var isJoinLobby = false;
+            if (EOS.lobbyId.NotEmpty())
+            {
+                var search = lobby.CreateLobbySearch(1);
+                if (search == null)
+                {
+                    return;
+                }
+
+                //search.SetParameter("name", true, ComparisonOp.Equal);
+                search.SetLobbyId(EOS.lobbyId);
+
+                var result = await search.Find(PlayerCtrl.userId);
+                if (result == null)
+                {
+                    return;
+                }
+
+                var count = search.GetSearchResultCount();
+                if (count > 0)
+                {
+                    isJoinLobby = true;
+
+                    var detail = search.CopySearchResultByIndex(0);
+                    var info = await lobby.JoinLobby(detail, PlayerCtrl.userId);
+                    if (info != null)
+                    {
+                        foreach (var userId in detail.GetMembers())
+                        {
+                            Ctrl.GenerateNetCtrl(userId);
+                        }
+                    }
+                    else
+                    {
+                        // TODO error join lobby
+                        Debug.LogError("Error join lobby");
+                    }
+                }
+            }
+
+            if (isJoinLobby == false)
+            {
+                await _CreateLobby();
+            }
+        }
+
+        /// <summary>
+        /// Create Lobby 
+        /// </summary>
+        /// <returns>Task</returns>
         async UniTask _CreateLobby()
         {
-            var lobby = EOSComponent.lobby;
+            var lobby = EOS.lobby;
 
-            var result = await lobby.CreateLobby(m_localUserId, 4, LobbyPermissionLevel.Publicadvertised);
+            var result = await lobby.CreateLobby(PlayerCtrl.userId, 50, LobbyPermissionLevel.Publicadvertised);
             if (result == null)
             {
                 return;
             }
 
-            var handle = lobby.UpdateLobbyModification(m_localUserId, result.LobbyId);
+            var handle = lobby.UpdateLobbyModification(PlayerCtrl.userId, result.LobbyId);
 
             // TODO 検索は機能していないが検索条件付与
             handle.AddAttribute("name", true, LobbyAttributeVisibility.Public);
 
-            m_joinLobbyId = result.LobbyId;
-            inptLobbyId.text = m_joinLobbyId;
+            EOS.lobbyId = result.LobbyId;
+            await _SendLobbyId(EOS.lobbyId);
 
-            _RecReq();
+            _SetRequestCallback();
         }
 
         /// <summary>
-        /// ロビーに入室
+        /// Send Packet
         /// </summary>
-        /// <returns>タスク</returns>
-        async UniTask _JoinLobby()
+        /// <param name="bytes">packet data</param>
+        public static void Send(byte[] bytes)
         {
-            var lobby = EOSComponent.lobby;
-
-            var search = lobby.CreateLobbySearch(10);
-            if (search == null)
+            var p2p = EOS.p2p;
+            foreach (var kv in Ctrl.idToCtrl)
             {
-                return;
+                if (PlayerCtrl.userId != kv.Key)
+                {
+                    p2p.SendPacket(EOS.socketName, PlayerCtrl.userId, kv.Key, EOS.channelId, bytes);
+                }
             }
-
-            // TODO 検索が死んでるので ID 直書き
-            //search.SetParameter("name", true, ComparisonOp.Equal);
-            search.SetLobbyId(inptLobbyId.text);
-
-            var result = await search.Find(m_localUserId);
-            if (result == null)
-            {
-                return;
-            }
-
-            var count = search.GetSearchResultCount();
-            Debug.Log($"{nameof(count)}:{count}");
-
-            var detail = search.CopySearchResultByIndex(0);
-
-            m_targetUserId = detail.GetLobbyOwner();
-            Debug.Log($"{nameof(m_targetUserId)}:{m_targetUserId}");
-
-            var info = await lobby.JoinLobby(detail, m_localUserId);
-            m_joinLobbyId = info.LobbyId;
-
-            // P2P リクエストのための初回送信
-            _Send();
         }
 
         /// <summary>
-        /// P2P 送信
+        /// Set callback for P2P requests
         /// </summary>
-        void _Send()
+        void _SetRequestCallback()
         {
-            var p2p = EOSComponent.p2p;
-            var bytes = Encoding.UTF8.GetBytes(inptSendMsg.text);
-            p2p.SendPacket(inptSocketId.text, m_targetUserId, m_localUserId, inptChannelId.text.ToByte(), bytes);
-        }
-
-        /// <summary>
-        /// P2P リクエストの受信
-        /// </summary>
-        void _RecReq()
-        {
-            var p2p = EOSComponent.p2p;
-            p2p.AddNotifyPeerConnectionRequest(inptSocketId.text, m_localUserId, e =>
+            var p2p = EOS.p2p;
+            p2p.AddNotifyPeerConnectionRequest(EOS.socketName, PlayerCtrl.userId, e =>
             {
-                Debug.Log($"ClientData:{e.ClientData} LocalUserId:{e.LocalUserId} RemoteUserId:{e.RemoteUserId} SocketName:{e.SocketId.SocketName}");
-
                 p2p.AcceptConnection(e.LocalUserId, e.RemoteUserId, e.SocketId.SocketName);
-                m_targetUserId = e.RemoteUserId;
+                Ctrl.GenerateNetCtrl(e.RemoteUserId);
             });
+
+            p2p.AddNotifyPeerConnectionClosed(EOS.socketName, PlayerCtrl.userId, e =>
+            {
+                Ctrl.RequestDestroy(e.RemoteUserId);
+            });
+        }
+
+
+        /// <summary>
+        /// Send Lobby Id To Tempolary Server
+        /// </summary>
+        /// <returns>Task</returns>
+        /// <param name="lobbyId">lobby id</param>
+        async UniTask _SendLobbyId(string lobbyId)
+        {
+            var form = new WWWForm();
+            form.AddField("v", lobbyId);
+            using (var req = UnityWebRequest.Post($"{EOS.apiUrl}?secret={EOS.apiSecret}", form))
+            {
+                try
+                {
+                    await req.SendWebRequest();
+                }
+                catch (UnityWebRequestException)
+                {
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get Lobby Id From Tempolary Server
+        /// </summary>
+        /// <returns>Task</returns>
+        async UniTask<string> _GetLobbyId()
+        {
+            using (var req = UnityWebRequest.Get($"{EOS.apiUrl}?secret={EOS.apiSecret}"))
+            {
+                try
+                {
+                    await req.SendWebRequest();
+                    return req.downloadHandler?.text;
+                }
+                catch (UnityWebRequestException)
+                {
+                }
+                return null;
+            }
         }
     }
 }

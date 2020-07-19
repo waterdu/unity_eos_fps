@@ -60,6 +60,26 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
+        /// 短縮 AddNotifyPeerConnectionClosed
+        /// </summary>
+        /// <param name="p2p">P2PInterface</param>
+        /// <param name="socketName">ソケット名</param>
+        /// <param name="localUserId">ログインユーザーID</param>
+        public static void AddNotifyPeerConnectionClosed(this P2PInterface p2p, string socketName, ProductUserId localUserId, OnRemoteConnectionClosedCallback fun)
+        {
+            var op = new AddNotifyPeerConnectionClosedOptions
+            {
+                SocketId = new SocketId
+                {
+                    SocketName = socketName
+                },
+                LocalUserId = localUserId,
+            };
+
+            p2p.AddNotifyPeerConnectionClosed(op, null, fun);
+        }
+
+        /// <summary>
         /// 短縮 AcceptConnection
         /// </summary>
         /// <param name="p2p">P2PInterface</param>

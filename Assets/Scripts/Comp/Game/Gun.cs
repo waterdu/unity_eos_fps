@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace App
+namespace Oka.App
 {
     public class Gun : MonoBehaviour
     {

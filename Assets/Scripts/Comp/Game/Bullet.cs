@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace App
+namespace Oka.App
 {
     public class Bullet : MonoBehaviour
     {
