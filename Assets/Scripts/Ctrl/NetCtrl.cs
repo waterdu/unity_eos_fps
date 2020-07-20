@@ -23,6 +23,7 @@ namespace Oka.App
             base.Respawn();
 
             Object.Destroy(chr.gameObject.GetComponent<Rigidbody>());
+            chr.camera.enabled = false;
         }
 
 
