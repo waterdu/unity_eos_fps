@@ -42,6 +42,7 @@ namespace EOSFps
                 if (size > 0)
                 {
                     var (remoteUserId, _, _, rawData, _) = p2p.ReceivePacket(playerUserId, size, EOS.channelId);
+                    //Debug.LogError($"Rec from:{remoteUserId.InnerHandle} player:{playerUserId.InnerHandle}");
                     Ctrl.idToCtrl[remoteUserId].ReceivePacket(MarshalTools.Deserialize<PacketData>(rawData));
                 }
             }
@@ -120,6 +121,9 @@ namespace EOSFps
 
             Ctrl.GeneratePlayer(playerId);
 
+            // set request callback
+            _ins._SetRequestCallback();
+
             await _ins._JoinLobby();
         }
 
@@ -149,29 +153,32 @@ namespace EOSFps
                 search.SetLobbyId(EOS.lobbyId);
 
                 var result = await search.Find(PlayerCtrl.userId);
-                if (result == null)
+                if (result != null)
                 {
-                    return;
-                }
-
-                var count = search.GetSearchResultCount();
-                if (count > 0)
-                {
-                    isJoinLobby = true;
-
-                    var detail = search.CopySearchResultByIndex(0);
-                    var info = await lobby.JoinLobby(detail, PlayerCtrl.userId);
-                    if (info != null)
+                    var count = search.GetSearchResultCount();
+                    if (count > 0)
                     {
-                        foreach (var userId in detail.GetMembers())
+                        isJoinLobby = true;
+
+                        var detail = search.CopySearchResultByIndex(0);
+                        var info = await lobby.JoinLobby(detail, PlayerCtrl.userId);
+                        if (info != null)
                         {
-                            Ctrl.GenerateNetCtrl(userId);
+                            foreach (var userId in detail.GetMembers())
+                            {
+                                if (userId.InnerHandle != PlayerCtrl.userId.InnerHandle)
+                                {
+                                    //Debug.LogError("login:" + userId.InnerHandle);
+                                    Ctrl.GenerateNetCtrl(userId);
+                                }
+                                //Debug.LogError("skip:" + userId.InnerHandle);
+                            }
                         }
-                    }
-                    else
-                    {
-                        // TODO error join lobby
-                        Debug.LogError("Error join lobby");
+                        else
+                        {
+                            // TODO error join lobby
+                            Debug.LogError("Error join lobby");
+                        }
                     }
                 }
             }
@@ -202,9 +209,8 @@ namespace EOSFps
             handle.AddAttribute("name", true, LobbyAttributeVisibility.Public);
 
             EOS.lobbyId = result.LobbyId;
+            Debug.LogError("lobbyId:" + EOS.lobbyId);
             await _SendLobbyId(EOS.lobbyId);
-
-            _SetRequestCallback();
         }
 
         /// <summary>
@@ -218,7 +224,8 @@ namespace EOSFps
             {
                 if (PlayerCtrl.userId != kv.Key)
                 {
-                    p2p.SendPacket(EOS.socketName, PlayerCtrl.userId, kv.Key, EOS.channelId, bytes);
+                    //Debug.LogError($"Send to:{kv.Key.InnerHandle} player:{PlayerCtrl.userId.InnerHandle}");
+                    p2p.SendPacket(EOS.socketName, kv.Key, PlayerCtrl.userId, EOS.channelId, bytes);
                 }
             }
         }
@@ -231,12 +238,14 @@ namespace EOSFps
             var p2p = EOS.p2p;
             p2p.AddNotifyPeerConnectionRequest(EOS.socketName, PlayerCtrl.userId, e =>
             {
+                Debug.LogError($"Request:Local:{e.RemoteUserId.InnerHandle} Remote:{e.RemoteUserId.InnerHandle} Player:{PlayerCtrl.userId.InnerHandle}");
                 p2p.AcceptConnection(e.LocalUserId, e.RemoteUserId, e.SocketId.SocketName);
                 Ctrl.GenerateNetCtrl(e.RemoteUserId);
             });
 
             p2p.AddNotifyPeerConnectionClosed(EOS.socketName, PlayerCtrl.userId, e =>
             {
+                Debug.LogError($"Closed:Local:{e.RemoteUserId.InnerHandle} Remote:{e.RemoteUserId.InnerHandle} Player:{PlayerCtrl.userId.InnerHandle}");
                 Ctrl.RequestDestroy(e.RemoteUserId);
             });
         }

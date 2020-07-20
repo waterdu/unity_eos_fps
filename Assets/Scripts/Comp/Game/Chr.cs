@@ -26,7 +26,6 @@ namespace Oka.App
             transform.localPosition = chrPos;
             transform.localEulerAngles = new Vector3(0, chrRot, 0);
             camera.transform.localEulerAngles = new Vector3(cameraRot, 0, 0);
-            Debug.LogError(cameraRot);
             if (isFire)
             {
                 gun.Fire();

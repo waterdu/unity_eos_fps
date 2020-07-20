@@ -77,6 +77,13 @@ namespace Oka.App
             var dx = Input.GetAxis("Mouse X") / 2f / Screen.width * 4000;
             var dy = Input.GetAxis("Mouse Y") / 2f / Screen.height * 4000;
 
+            if (UI.isLockMouse == false)
+            {
+                dx = 0f;
+                dy = 0f;
+            }
+
+
             var bodyRot = chr.transform.localRotation.eulerAngles.y + dx;
             var camRot = chr.camera.transform.localRotation.eulerAngles.x - dy;
             if (dy > 0 && (camRot < -90f && camRot > -180f || camRot < 270f && camRot > 180f))

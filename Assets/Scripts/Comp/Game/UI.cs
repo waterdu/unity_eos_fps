@@ -21,6 +21,7 @@ namespace Oka.App
         public TMP_InputField inptDevPort = null;
         public TMP_InputField inptDevName = null;
         public Button btnDevLogin = null;
+        public static bool isLockMouse = false;
 
         /// <summary>
         /// Start
@@ -45,8 +46,22 @@ namespace Oka.App
             else
             {
                 canvas.enabled = false;
-                Cursor.lockState = CursorLockMode.Confined;
-                Cursor.visible = false;
+
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    isLockMouse = !isLockMouse;
+                }
+
+                if (isLockMouse)
+                {
+                    Cursor.lockState = CursorLockMode.Confined;
+                    Cursor.visible = false;
+                }
+                else
+                {
+                    Cursor.lockState = CursorLockMode.None;
+                    Cursor.visible = true;
+                }
             }
         }
     }

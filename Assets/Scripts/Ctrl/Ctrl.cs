@@ -41,31 +41,34 @@ namespace Oka.App
 
         public static void GeneratePlayer(ProductUserId userId)
         {
-            if (idToCtrl.NoKey(userId))
+            if (idToCtrl.Keys.ToList().Exists(e => e.InnerHandle == userId.InnerHandle) == false)
             {
+                Debug.LogError("Generate Player:" + userId.InnerHandle);
                 idToCtrl[userId] = new PlayerCtrl(userId);
                 return;
             }
-            Debug.LogError("User already login");
+            Debug.LogError("User already login:" + userId.InnerHandle);
         }
 
         public static void GenerateNetCtrl(ProductUserId userId)
         {
-            if (idToCtrl.NoKey(userId))
+            if (idToCtrl.Keys.ToList().Exists(e => e.InnerHandle == userId.InnerHandle) == false)
             {
+                Debug.LogError("Generate Npc:" + userId.InnerHandle);
                 idToCtrl[userId] = new NetCtrl(userId);
+                return;
             }
-            Debug.LogError("User already login");
+            Debug.LogError("User already login:" + userId.InnerHandle);
         }
 
         public static void RequestDestroy(ProductUserId userId)
         {
-            if (idToCtrl.NoKey(userId))
+            if (idToCtrl.Keys.ToList().Exists(e => e.InnerHandle == userId.InnerHandle) == false)
             {
                 idToCtrl[userId].isRequestDestroy = true;
                 return;
             }
-            Debug.LogError("User not found");
+            Debug.LogError("User not found:" + userId.InnerHandle);
         }
 
         protected virtual void Respawn()

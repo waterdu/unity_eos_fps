@@ -35,7 +35,7 @@ namespace Oka.EOSExt
             var result = p2p.SendPacket(op);
             if (result != Result.Success)
             {
-                Debug.LogError($"error {DebugTools.GetClassMethodName()}:{result}");
+                //Debug.LogError($"error {DebugTools.GetClassMethodName()}:{result}");
             }
         }
 

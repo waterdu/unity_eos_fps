@@ -52,7 +52,7 @@ namespace Oka.EOSExt
             var list = new List<ProductUserId>();
             for (int i = 0; i < count; i++)
             {
-                list.Add(detail.GetMemberByIndex(detail.GetMemberCount()));
+                list.Add(detail.GetMemberByIndex((uint)i));
             }
             return list;
         }
