@@ -8,7 +8,7 @@ namespace Oka.App
         void Update()
         {
             transform.localPosition += transform.up * Time.deltaTime * 20;
-            if (Mathf.Abs(transform.localPosition.x) > 1000 || Mathf.Abs(transform.localPosition.y) > 1000 || Mathf.Abs(transform.localPosition.z) > 1000)
+            if (Mathf.Abs(transform.localPosition.x) > 300 || Mathf.Abs(transform.localPosition.y) > 300 || Mathf.Abs(transform.localPosition.z) > 300)
             {
                 Destroy(gameObject);
             }

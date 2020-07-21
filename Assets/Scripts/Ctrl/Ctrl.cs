@@ -74,7 +74,7 @@ namespace Oka.App
         protected virtual void Respawn()
         {
             chr = Object.Instantiate(App.chrPrefab);
-            chr.transform.localPosition = new Vector3(Random.Range(1, 3), 1, Random.Range(1, 3));
+            chr.transform.localPosition = new Vector3(Random.Range(1, 3), 1.5f, Random.Range(1, 3));
         }
 
         protected virtual void Tick()

@@ -11,7 +11,8 @@ namespace Oka.App
         public Rigidbody rigid = null;
         public new Camera camera = null;
         public Gun gun = null;
-        public MoveState state = MoveState.JUMPING;
+        public Foot foot = null;
+        public MoveState state => foot.state;
         public bool isDamage = false;
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace Oka.App
 
         public void Jump()
         {
-            rigid?.AddForce(Vector3.up * 50, ForceMode.Acceleration);
+            rigid?.AddForce(Vector3.up * 20f, ForceMode.Acceleration);
         }
 
         /// <summary>
@@ -47,7 +48,6 @@ namespace Oka.App
             {
                 isDamage = true;
             }
-            state = MoveState.LANDING;
         }
 
         /// <summary>
@@ -56,7 +56,6 @@ namespace Oka.App
         /// <param name="col">collision</param>
         void OnCollisionExit(Collision col)
         {
-            state = MoveState.JUMPING;
         }
 
         void Reset()
