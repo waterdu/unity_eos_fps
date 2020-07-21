@@ -75,17 +75,14 @@ namespace EOSFps
 
             var refreshToken = SaveDataUtils.GetString(Defines.KEY_REFRESH_TOKEN);
             LoginCallbackInfo authRes = null;
-            if (refreshToken.IsNullOrEmpty())
-            {
-                authRes = await auth.Login(LoginCredentialType.AccountPortal, string.Empty, string.Empty);
-                if (authRes == null)
-                {
-                    return;
-                }
-            }
-            else
+            if (refreshToken.NotEmpty())
             {
                 authRes = await auth.Login(LoginCredentialType.RefreshToken, string.Empty, refreshToken);
+            }
+
+            if (authRes == null)
+            {
+                authRes = await auth.Login(LoginCredentialType.AccountPortal, string.Empty, string.Empty);
                 if (authRes == null)
                 {
                     return;

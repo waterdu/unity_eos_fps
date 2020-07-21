@@ -21,7 +21,7 @@ namespace Oka.App
         public TMP_InputField inptDevPort = null;
         public TMP_InputField inptDevName = null;
         public Button btnDevLogin = null;
-        public static bool isLockMouse = false;
+        public static bool isLockMouse = true;
 
         /// <summary>
         /// Start
