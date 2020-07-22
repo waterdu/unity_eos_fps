@@ -14,13 +14,15 @@ namespace Oka.App
     /// </summary>
     public class UI : MonoBehaviour
     {
-        public Canvas canvas = null;
+        public GameObject rootContent = null;
 
         public Button btnAuthLogin = null;
 
         public TMP_InputField inptDevPort = null;
         public TMP_InputField inptDevName = null;
         public Button btnDevLogin = null;
+
+        public Button btnGithub = null;
         public static bool isLockMouse = true;
 
         /// <summary>
@@ -30,6 +32,7 @@ namespace Oka.App
         {
             btnAuthLogin.SetOnClick(() => EOSP2P.LoginAuth().Forget());
             btnDevLogin.SetOnClick(() => EOSP2P.LoginDev(inptDevPort.text.ToInt(), inptDevName.text).Forget());
+            btnGithub.SetOnClick(() => Application.OpenURL("https://github.com/okamototomoyuki/unity_eos_fps"));
         }
 
         /// <summary>
@@ -39,13 +42,13 @@ namespace Oka.App
         {
             if (PlayerCtrl.userId == null)
             {
-                canvas.enabled = true;
+                rootContent.SetActive(true);
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
             else
             {
-                canvas.enabled = false;
+                rootContent.SetActive(false);
 
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
