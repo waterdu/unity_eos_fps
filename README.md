@@ -40,11 +40,12 @@ Calling the SDK was constantly increasing the amount of code, so I wrote more ex
 1. Open [eos-lobby](https://glitch.com/~eos-lobby) and use "View Sorce" -> "Remix Edit" to clone to your account  
 2. Set the secret key and value in .env  
   * **Variable Name:** SECRET  
-  * **Valiable Value:** An appropriate character string
+  * **Valiable Value:** An appropriate character string  
 ![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/671642/809d0a83-2bfb-f3ec-9200-1b2817e1f122.png)  
 3. Write to Assets/ScriptableObjects/EOSSettings.asset of Unity project  
   * **Api Url :** https://[Project name after cloning].glitch.me/kvs  
-  * **Api Securet :** String set in SECRET of .env
+  * **Api Securet :** String set in SECRET of .env  
+![image.png](https://qiita-image-store.s3.ap-northeast-1.amazonaws.com/0/671642/61ca5503-6212-88be-e355-54af019adbdb.png)
 
 ### 4. Build
 Build with Windows Standalone.  
