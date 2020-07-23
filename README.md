@@ -11,7 +11,7 @@ Unfortunately, we can't play with everyone right now, we can only build and test
 I will report any progress. 😢  
 
 ## Addressing a bug in the lobby search  
-As of July 23, 2020, the EOS lobby search is buggy.
+As of July 23, 2020, the EOS lobby search is buggy.  
 P2P communication cannot be started unless you are in the same lobby,  
 As a workaround, I made a simple lobby search server with Glitch.  
 It is an API that only holds and delivers the lobby ID  
