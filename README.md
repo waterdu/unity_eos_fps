@@ -2,8 +2,8 @@
 Unity + Epic Online Services multiplayer game  
 
 ## Sorry: Game cannot be published  
-I was developing it so that many people on the net could play it.
-However, I noticed it when it was released.
+I was developing it so that many people on the net could play it.  
+But when I tried to publish it, I realized.  
 **Publishing of Epic Online Services games is not yet permitted.**  
 Therefore, if you log in to the game with an account other than the development team, it will be repelled.  
   
