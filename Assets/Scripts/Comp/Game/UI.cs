@@ -14,7 +14,7 @@ namespace Oka.App
     /// </summary>
     public class UI : MonoBehaviour
     {
-        public GameObject rootContent = null;
+        public GameObject loginRoot = null;
 
         public Button btnAuthLogin = null;
 
@@ -23,6 +23,11 @@ namespace Oka.App
         public Button btnDevLogin = null;
 
         public Button btnGithub = null;
+
+
+        public GameObject inGameRoot = null;
+        public TextMeshProUGUI hp = null;
+
         public static bool isLockMouse = true;
 
         /// <summary>
@@ -42,17 +47,27 @@ namespace Oka.App
         {
             if (PlayerCtrl.userId == null)
             {
-                rootContent.SetActive(true);
+                loginRoot.SetActive(true);
+                inGameRoot.SetActive(false);
                 Cursor.lockState = CursorLockMode.None;
                 Cursor.visible = true;
             }
             else
             {
-                rootContent.SetActive(false);
+                loginRoot.SetActive(false);
+                inGameRoot.SetActive(true);
+
+                hp.text = $"{PlayerCtrl.hp}/{PlayerCtrl.MAX_HP}";
+
+                loginRoot.SetActive(false);
 
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    isLockMouse = !isLockMouse;
+                    isLockMouse = false;
+                }
+                else if (Input.GetMouseButtonDown(0))
+                {
+                    isLockMouse = true;
                 }
 
                 if (isLockMouse)

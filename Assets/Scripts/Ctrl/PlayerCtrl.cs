@@ -11,10 +11,12 @@ namespace Oka.App
     /// </summary>
     public class PlayerCtrl : Ctrl
     {
+        public const int MAX_HP = 3;
+
         static PlayerCtrl _ins = null;
         public new static ProductUserId userId => _ins != null ? ((Ctrl)_ins).userId : null;
 
-        public int hp = 0;
+        public static int hp = 0;
 
         public PlayerCtrl(ProductUserId userId) : base(userId)
         {
@@ -26,7 +28,7 @@ namespace Oka.App
         /// </summary>
         protected override void Respawn()
         {
-            hp = 3;
+            hp = MAX_HP;
 
             base.Respawn();
         }
