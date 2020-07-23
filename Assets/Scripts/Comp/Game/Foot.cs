@@ -15,6 +15,10 @@ namespace Oka.App
             {
                 state = MoveState.LANDING;
             }
+            if (other.gameObject.CompareTag("Deadzone"))
+            {
+                PlayerCtrl.hp = 0;
+            }
         }
 
         void OnTriggerExit(Collider other)

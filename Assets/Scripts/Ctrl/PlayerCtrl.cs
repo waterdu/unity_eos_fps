@@ -41,11 +41,11 @@ namespace Oka.App
             if (chr.isDamage)
             {
                 hp--;
-                if (hp == 0)
-                {
-                    chr.DestroyNotNull();
-                }
                 chr.isDamage = false;
+            }
+            if (hp == 0)
+            {
+                chr.DestroyNotNull();
             }
 
             var isMove = false;
