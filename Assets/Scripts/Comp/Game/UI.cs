@@ -18,6 +18,7 @@ namespace Oka.App
         public GameObject loginRoot = null;
 
         public Button btnAuthLogin = null;
+        public Button btnDeleteAuth = null;
 
         public TMP_InputField inptDevPort = null;
         public TMP_InputField inptDevName = null;
@@ -39,6 +40,7 @@ namespace Oka.App
         void Start()
         {
             btnAuthLogin.SetOnClick(() => EOSP2P.LoginAuth().Forget());
+            btnDeleteAuth.SetOnClick(() => SaveDataUtils.DeleteKey(Defines.KEY_REFRESH_TOKEN));
             btnDevLogin.SetOnClick(() => EOSP2P.LoginDev(inptDevPort.text.ToInt(), inptDevName.text).Forget());
             btnGithub.SetOnClick(() => Application.OpenURL("https://github.com/okamototomoyuki/unity_eos_fps"));
         }
@@ -50,6 +52,8 @@ namespace Oka.App
         {
             if (PlayerCtrl.userId == null)
             {
+                btnDeleteAuth.gameObject.SetActive(SaveDataUtils.HasKey(Defines.KEY_REFRESH_TOKEN));
+
                 loginRoot.SetActive(true);
                 inGameRoot.SetActive(false);
                 Cursor.lockState = CursorLockMode.None;

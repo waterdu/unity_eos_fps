@@ -24,5 +24,25 @@ namespace Oka.Common
             PlayerPrefs.SetString(k, v);
             PlayerPrefs.Save();
         }
+
+        /// <summary>
+        /// Has key? 
+        /// </summary>
+        /// <param name="k">key</param>
+        /// <returns>true:exists key</returns>
+        public static bool HasKey(string k)
+        {
+            return PlayerPrefs.HasKey(k);
+        }
+
+        /// <summary>
+        /// Delete value from PlayerPrefs
+        /// </summary>
+        /// <param name="k">key</param>
+        public static void DeleteKey(string k)
+        {
+            PlayerPrefs.DeleteKey(k);
+            PlayerPrefs.Save();
+        }
     }
 }
