@@ -14,13 +14,13 @@ I will report any progress. 😢
 As of July 23, 2020, the EOS lobby search is buggy.  
 P2P communication cannot be started unless you are in the same lobby,  
 As a workaround, I made a simple lobby search server with Glitch.  
-It is an API that only holds and delivers the lobby ID  
+It is an API that only holds and delivers the lobby ID.  
 [eos-lobby](https://glitch.com/~eos-lobby)  
   
 ## Devised  
 Calling the SDK was constantly increasing the amount of code, so I wrote more extension methods and organized them.  
 
-* Replaced so that it can be called with only the argument
+* Replaced so that it can be called with only the argument.
 * The return value is UniTask and the callback is received by async.
 
 ## build  
@@ -47,4 +47,4 @@ Calling the SDK was constantly increasing the amount of code, so I wrote more ex
   * **Api Securet :** String set in SECRET of .env
 
 ### 4. Build
-Build with Windows Standalone  
+Build with Windows Standalone.  
