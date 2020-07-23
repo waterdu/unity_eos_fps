@@ -9,7 +9,7 @@ namespace EOSCommon
     {
         [Header("EOS")]
         public string productName;
-        public string productVersion;
+        public string productVersion = "1.0";
         public string clientId;
         public string clientSecret;
         public string productId;
