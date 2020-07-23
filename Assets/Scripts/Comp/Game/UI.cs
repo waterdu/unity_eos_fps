@@ -6,6 +6,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using EOSFps;
+using System;
 
 namespace Oka.App
 {
@@ -26,7 +27,9 @@ namespace Oka.App
 
 
         public GameObject inGameRoot = null;
-        public TextMeshProUGUI hp = null;
+        public TextMeshProUGUI lblLobbyId = null;
+        public TextMeshProUGUI lblUserCount = null;
+        public TextMeshProUGUI lblHp = null;
 
         public static bool isLockMouse = true;
 
@@ -57,7 +60,11 @@ namespace Oka.App
                 loginRoot.SetActive(false);
                 inGameRoot.SetActive(true);
 
-                hp.text = $"{PlayerCtrl.hp}/{PlayerCtrl.MAX_HP}";
+                var numDot = DateTime.Now.Second % 3;
+                var lobbyIdText = EOS.lobbyId == null ? "Connecting." + new string('.', numDot) : EOS.lobbyId;
+                lblLobbyId.text = $"Lobby Id : {lobbyIdText}";
+                lblUserCount.text = $"User Count : {Ctrl.idToCtrl.Keys.Count}";
+                lblHp.text = $"HP : {PlayerCtrl.hp}/{PlayerCtrl.MAX_HP}";
 
                 loginRoot.SetActive(false);
 
