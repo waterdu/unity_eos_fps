@@ -8,18 +8,18 @@ using Oka.Common;
 namespace Oka.EOSExt
 {
     /// <summary>
-    /// LobbyInterface 拡張
+    /// LobbyInterface Extensions
     /// </summary>
     public static class LobbyInterfaceExtensions
     {
         /// <summary>
-        /// 非同期 CreateLobby
+        /// Async CreateLobby
         /// </summary>
         /// <param name="lobby">LobbyInterface</param>
-        /// <param name="localUserId">ログインユーザーのID</param>
-        /// <param name="maxLobbyMembers">最大人数</param>
-        /// <param name="permissionLevel">公開設定</param>
-        /// <returns>タスク</returns>
+        /// <param name="localUserId">Login user id</param>
+        /// <param name="maxLobbyMembers">Max member count</param>
+        /// <param name="permissionLevel">Public settings, etc.</param>
+        /// <returns>Task</returns>
         public static async UniTask<CreateLobbyCallbackInfo> CreateLobby(this LobbyInterface lobby, ProductUserId localUserId, uint maxLobbyMembers, LobbyPermissionLevel permissionLevel)
         {
             var lobbyOp = new CreateLobbyOptions
@@ -47,12 +47,12 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
-        /// 短縮 UpdateLobbyModification
+        /// Short UpdateLobbyModification
         /// </summary>
         /// <param name="lobby">LobbyInterface</param>
-        /// <param name="localUserId">ログインユーザーID</param>
-        /// <param name="LobbyId">ロビーID</param>
-        /// <returns>ハンドル</returns>
+        /// <param name="localUserId">Login user id</param>
+        /// <param name="LobbyId">Lobby id</param>
+        /// <returns>Handle</returns>
         public static LobbyModification UpdateLobbyModification(this LobbyInterface lobby, ProductUserId localUserId, string lobbyId)
         {
             var modOp = new UpdateLobbyModificationOptions
@@ -72,11 +72,11 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
-        /// 短縮 UpdateLobbyModification
+        /// Short UpdateLobbyModification
         /// </summary>
         /// <param name="lobby">LobbyInterface</param>
-        /// <param name="maxResults">最大検索数</param>
-        /// <returns>ロビー検索</returns>
+        /// <param name="maxResults">Max search count</param>
+        /// <returns>Lobby search instance</returns>
         public static LobbySearch CreateLobbySearch(this LobbyInterface lobby, uint maxResults)
         {
             var lobbyOp = new CreateLobbySearchOptions
@@ -95,12 +95,12 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
-        /// 非同期 JoinLobby
+        /// Async JoinLobby
         /// </summary>
         /// <param name="lobby">LobbyInterface</param>
-        /// <param name="lobbyDetailsHandle">部屋詳細</param>
-        /// <param name="localUserId">ログインユーザーID</param>
-        /// <returns>タスク</returns>
+        /// <param name="lobbyDetailsHandle">Lobby detail</param>
+        /// <param name="localUserId">Login user id</param>
+        /// <returns>Task</returns>
         public static async UniTask<JoinLobbyCallbackInfo> JoinLobby(this LobbyInterface lobby, LobbyDetails lobbyDetailsHandle, ProductUserId localUserId)
         {
             var joinOp = new JoinLobbyOptions

@@ -4,14 +4,14 @@ using System.Runtime.CompilerServices;
 namespace Oka.Common
 {
     /// <summary>
-    /// デバッグ用ツール 拡張
-    /// </summary>
+    /// Debug Tools 
+    /// /// </summary>
     public static class DebugTools
     {
         /// <summary>
-        /// クラスとメソッド名を文字列で取得
+        /// Get class and method names
         /// </summary>
-        /// <returns>クラス・メソッド名</returns>
+        /// <returns>class,method name</returns>
         [MethodImpl(MethodImplOptions.NoInlining)]
         public static string GetClassMethodName()
         {

@@ -5,11 +5,8 @@ using Epic.OnlineServices.Auth;
 using Epic.OnlineServices.Lobby;
 using Oka.Common;
 using Oka.EOSExt;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
-using Epic.OnlineServices;
 
 namespace EOSFps
 {
@@ -21,7 +18,7 @@ namespace EOSFps
         static EOSP2P _ins = null;
 
         /// <summary>
-        /// Start
+        /// First frame
         /// </summary>
         void Start()
         {
@@ -29,7 +26,7 @@ namespace EOSFps
         }
 
         /// <summary>
-        /// Update
+        /// Every frame
         /// </summary>
         void Update()
         {
@@ -42,7 +39,6 @@ namespace EOSFps
                 if (size > 0)
                 {
                     var (remoteUserId, _, _, rawData, _) = p2p.ReceivePacket(playerUserId, size, EOS.channelId);
-                    //Debug.LogError($"Rec from:{remoteUserId.InnerHandle} player:{playerUserId.InnerHandle}");
                     Ctrl.idToCtrl[remoteUserId].ReceivePacket(MarshalTools.Deserialize<PacketData>(rawData));
                 }
             }
@@ -118,7 +114,7 @@ namespace EOSFps
 
             Ctrl.GeneratePlayer(playerId);
 
-            // set request callback
+            // Set request callback
             _ins._SetRequestCallback();
 
             await _ins._JoinLobby();
@@ -165,15 +161,12 @@ namespace EOSFps
                             {
                                 if (userId.InnerHandle != PlayerCtrl.userId.InnerHandle)
                                 {
-                                    //Debug.LogError("login:" + userId.InnerHandle);
                                     Ctrl.GenerateNetCtrl(userId);
                                 }
-                                //Debug.LogError("skip:" + userId.InnerHandle);
                             }
                         }
                         else
                         {
-                            // TODO error join lobby
                             Debug.LogError("Error join lobby");
                         }
                     }
@@ -202,7 +195,7 @@ namespace EOSFps
 
             var handle = lobby.UpdateLobbyModification(PlayerCtrl.userId, result.LobbyId);
 
-            // TODO 検索は機能していないが検索条件付与
+            // TODO : Lobby search is not working. No need to add.
             handle.AddAttribute("name", true, LobbyAttributeVisibility.Public);
 
             EOS.lobbyId = result.LobbyId;
@@ -221,7 +214,6 @@ namespace EOSFps
             {
                 if (PlayerCtrl.userId != kv.Key)
                 {
-                    //Debug.LogError($"Send to:{kv.Key.InnerHandle} player:{PlayerCtrl.userId.InnerHandle}");
                     p2p.SendPacket(EOS.socketName, kv.Key, PlayerCtrl.userId, EOS.channelId, bytes);
                 }
             }

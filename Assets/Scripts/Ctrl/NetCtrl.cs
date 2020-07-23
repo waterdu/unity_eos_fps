@@ -11,6 +11,10 @@ namespace Oka.App
     /// </summary>
     public class NetCtrl : Ctrl
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="userId">remote user id</param>
         public NetCtrl(ProductUserId userId) : base(userId)
         {
         }

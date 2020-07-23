@@ -7,17 +7,17 @@ using Oka.Common;
 namespace Oka.EOSExt
 {
     /// <summary>
-    /// ConnectInterface 拡張
+    /// ConnectInterface Extensions
     /// </summary>
     public static class ConnectInterfaceExtensions
     {
         /// <summary>
-        /// 非同期 Login
+        /// Async Login
         /// </summary>
-        /// <param name="type">ログイン種別</param>
+        /// <param name="type">Login type</param>
         /// <param name="id">ID</param>
-        /// <param name="token">トークン</param>
-        /// <returns>タスク</returns>
+        /// <param name="token">Token</param>
+        /// <returns>Task</returns>
         public static async UniTask<LoginCallbackInfo> Login(this ConnectInterface conn, string token, ExternalCredentialType type)
         {
             var op = new LoginOptions

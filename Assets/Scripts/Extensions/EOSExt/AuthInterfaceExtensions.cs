@@ -8,18 +8,18 @@ using Oka.Common;
 namespace Oka.EOSExt
 {
     /// <summary>
-    /// AuthInterface 拡張
+    /// AuthInterface Extensions
     /// </summary>
     public static class AuthInterfaceExtensions
     {
         /// <summary>
-        /// 非同期 Login
+        /// Async Login
         /// </summary>
         /// <param name="auth">AuthInterface</param>
-        /// <param name="type">ログイン種別</param>
+        /// <param name="type">Login type</param>
         /// <param name="id">ID</param>
-        /// <param name="token">トークン</param>
-        /// <returns>タスク</returns>
+        /// <param name="token">Token</param>
+        /// <returns>Task</returns>
         public static async UniTask<LoginCallbackInfo> Login(this AuthInterface auth, LoginCredentialType type, string id, string token)
         {
             var op = new LoginOptions();
@@ -50,11 +50,11 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
-        /// 省略 CopyUserAuthToken
+        /// Short CopyUserAuthToken
         /// </summary>
         /// <param name="auth">AuthInterface</param>
-        /// <param name="localUserId">ログインユーザーID</param>
-        /// <returns>トークン</returns>
+        /// <param name="localUserId">Login user id</param>
+        /// <returns>Token</returns>
         public static Token CopyUserAuthToken(this AuthInterface auth, EpicAccountId localUserId)
         {
             var result = auth.CopyUserAuthToken(new CopyUserAuthTokenOptions(), localUserId, out Token token);

@@ -8,17 +8,17 @@ using Oka.Common;
 namespace Oka.EOSExt
 {
     /// <summary>
-    /// LobbyModification 拡張
+    /// LobbyModification Extensions
     /// </summary>
     public static class LobbyModificationExtensions
     {
         /// <summary>
-        /// 短縮 UpdateLobbyModification
+        /// Short UpdateLobbyModification
         /// </summary>
         /// <param name="lobby">LobbyModification</param>
-        /// <param name="key">キー</param>
-        /// <param name="value">値</param>
-        /// <param name="visibility">属性の公開設定</param>
+        /// <param name="key">Key</param>
+        /// <param name="value">Value</param>
+        /// <param name="visibility">Visibility type</param>
         public static void AddAttribute(this LobbyModification modify, string key, AttributeDataValue value, LobbyAttributeVisibility visibility)
         {
             var attr = new AttributeData();

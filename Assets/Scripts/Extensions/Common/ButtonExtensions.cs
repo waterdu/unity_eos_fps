@@ -4,15 +4,15 @@ using UnityEngine.Events;
 namespace Oka.Common
 {
     /// <summary>
-    /// TMP_InputField 拡張
+    /// TMP_InputField Extensions
     /// </summary>
     public static class ButtonExtensions
     {
         /// <summary>
-        /// 押下アクション追加
+        /// Set onClick Action
         /// </summary>
-        /// <param name="button">ボタン</param>
-        /// <param name="act">アクション</param>
+        /// <param name="button">button</param>
+        /// <param name="act">action at click</param>
         public static void SetOnClick(this Button button, UnityAction act)
         {
             button.onClick.RemoveAllListeners();

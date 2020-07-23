@@ -4,7 +4,7 @@ using Oka.Common;
 namespace Oka.App
 {
     /// <summary>
-    /// Character Compoonent
+    /// Character compoonent
     /// </summary>
     public class Chr : MonoBehaviour
     {
@@ -33,6 +33,9 @@ namespace Oka.App
             }
         }
 
+        /// <summary>
+        /// Jump action
+        /// </summary>
         public void Jump()
         {
             rigid?.AddForce(Vector3.up * 20f, ForceMode.Acceleration);
@@ -58,6 +61,9 @@ namespace Oka.App
         {
         }
 
+        /// <summary>
+        /// Reset component
+        /// </summary>
         void Reset()
         {
             rigid = gameObject.GetComponent<Rigidbody>();

@@ -4,11 +4,17 @@ using UnityEngine;
 
 namespace Oka.App
 {
+    /// <summary>
+    /// Gun component
+    /// </summary>
     public class Gun : MonoBehaviour
     {
         public GameObject m_ancGun = null;
         public Bullet m_bulletPrefab = null;
 
+        /// <summary>
+        /// Fire action
+        /// </summary>
         public void Fire()
         {
             var clone = Instantiate(m_bulletPrefab);

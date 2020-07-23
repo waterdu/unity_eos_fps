@@ -8,65 +8,65 @@ namespace Oka.Common
     public static class StringExtensions
     {
         /// <summary>
-        /// 空か？
+        /// Short IsNullOrEmpty
         /// </summary>
-        /// <param name="s">文字列</param>
-        /// <returns>true:空</returns>
+        /// <param name="s">string</param>
+        /// <returns>true:empty</returns>
         public static bool IsNullOrEmpty(this string s) => string.IsNullOrEmpty(s);
 
         /// <summary>
-        /// 空ではないか？
+        /// Not IsNullOrEmpty
         /// </summary>
-        /// <param name="s">文字列</param>
-        /// <returns>true:空ではない</returns>
+        /// <param name="s">string</param>
+        /// <returns>true:true:not empty</returns>
         public static bool NotEmpty(this string s) => string.IsNullOrEmpty(s) == false;
 
 
         /// <summary>
-        /// int に変換
+        /// Convert byte
         /// </summary>
-        /// <param name="s">文字列</param>
-        /// <param name="error">変換失敗時の値</param>
+        /// <param name="s">string</param>
+        /// <param name="error">value at error</param>
         /// <returns>int</returns>
         public static byte ToByte(this string s, byte error = 0) => byte.TryParse(s, out byte result) ? result : error;
 
         /// <summary>
-        /// int に変換
+        /// Convert int
         /// </summary>
-        /// <param name="s">文字列</param>
-        /// <param name="error">変換失敗時の値</param>
+        /// <param name="s">string</param>
+        /// <param name="error">value at error</param>
         /// <returns>int</returns>
         public static int ToInt(this string s, int error = -1) => int.TryParse(s, out int result) ? result : error;
 
         /// <summary>
-        /// long に変換
+        /// Convert long
         /// </summary>
-        /// <param name="s">文字列</param>
-        /// <param name="error">変換失敗時の値</param>
+        /// <param name="s">string</param>
+        /// <param name="error">value at error</param>
         /// <returns>long</returns>
         public static long ToLong(this string s, long error = -1) => long.TryParse(s, out long result) ? result : error;
 
         /// <summary>
-        /// 正規表現で置換
+        /// Replace by regex
         /// </summary>
-        /// <param name="s">文字列</param>
-        /// <param name="regex">正規表現</param>
-        /// <param name="replace">置換文字列</param>
-        /// <returns>置換後の文字列</returns>
+        /// <param name="s">string</param>
+        /// <param name="regex">Regex string</param>
+        /// <param name="replace">Replace string</param>
+        /// <returns>Replaced string</returns>
         public static string ReplaceAll(this string s, string regex, string replace) => Regex.Replace(s, regex, replace);
 
         /// <summary>
-        /// 正規表現にマッチしたか
+        /// Is match regex?
         /// </summary>
-        /// <param name="s">文字列</param>
-        /// <param name="regex">正規表現</param>
-        /// <returns>true:マッチ</returns>
+        /// <param name="s">string</param>
+        /// <param name="regex">Regex string</param>
+        /// <returns>true:matched</returns>
         public static bool IsMatch(this string s, string regex) => Regex.IsMatch(s, regex);
 
         /// <summary>
-        /// Null なら空文字
+        /// Null to empty
         /// </summary>
-        /// <param name="s">文字列</param>
+        /// <param name="s">string</param>
         /// <returns>文字列または空文字</returns>
         public static string NullToEmp(this string s) => s == null ? string.Empty : s;
     }

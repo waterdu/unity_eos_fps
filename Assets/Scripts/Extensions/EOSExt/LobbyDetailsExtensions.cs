@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Oka.EOSExt
 {
     /// <summary>
-    /// LobbySearch 拡張
+    /// LobbySearch Extensions
     /// </summary>
     public static class LobbyDetailsExtensions
     {

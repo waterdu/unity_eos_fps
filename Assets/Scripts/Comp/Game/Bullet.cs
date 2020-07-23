@@ -2,9 +2,14 @@
 
 namespace Oka.App
 {
+    /// <summary>
+    /// Bullet component
+    /// </summary>
     public class Bullet : MonoBehaviour
     {
-        // Update is called once per frame
+        /// <summary>
+        /// Every frame
+        /// </summary>
         void Update()
         {
             transform.localPosition += transform.up * Time.deltaTime * 20;
@@ -14,6 +19,9 @@ namespace Oka.App
             }
         }
 
+        /// <summary>
+        /// On collide start
+        /// </summary>
         void OnCollisionEnter(Collision col)
         {
             Destroy(this.gameObject);

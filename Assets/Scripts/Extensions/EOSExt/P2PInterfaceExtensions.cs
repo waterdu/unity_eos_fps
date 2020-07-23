@@ -6,19 +6,19 @@ using Oka.Common;
 namespace Oka.EOSExt
 {
     /// <summary>
-    /// P2PInterface 拡張
+    /// P2PInterface Extensions
     /// </summary>
     public static class P2PInterfaceExtensions
     {
         /// <summary>
-        /// 短縮 SendPacket
+        /// Short SendPacket
         /// </summary>
         /// <param name="p2p">P2PInterface</param>
-        /// <param name="socketName">ソケット名</param>
-        /// <param name="remoteUserId">送信先ユーザーID</param>
-        /// <param name="localUserId">ログインユーザーID</param>
-        /// <param name="channel">チャンネル</param>
-        /// <param name="data">データ</param>
+        /// <param name="socketName">Socket name</param>
+        /// <param name="remoteUserId">Send to user id</param>
+        /// <param name="localUserId">Login user id</param>
+        /// <param name="channel">Channel id</param>
+        /// <param name="data">data</param>
         public static void SendPacket(this P2PInterface p2p, string socketName, ProductUserId remoteUserId, ProductUserId localUserId, byte channel, byte[] data)
         {
             var op = new SendPacketOptions
@@ -35,16 +35,16 @@ namespace Oka.EOSExt
             var result = p2p.SendPacket(op);
             if (result != Result.Success)
             {
-                //Debug.LogError($"error {DebugTools.GetClassMethodName()}:{result}");
+                Debug.LogError($"error {DebugTools.GetClassMethodName()}:{result}");
             }
         }
 
         /// <summary>
-        /// 短縮 AddNotifyPeerConnectionRequest
+        /// Short AddNotifyPeerConnectionRequest
         /// </summary>
         /// <param name="p2p">P2PInterface</param>
-        /// <param name="socketName">ソケット名</param>
-        /// <param name="localUserId">ログインユーザーID</param>
+        /// <param name="socketName">Socket name</param>
+        /// <param name="localUserId">Login user id</param>
         public static void AddNotifyPeerConnectionRequest(this P2PInterface p2p, string socketName, ProductUserId localUserId, OnIncomingConnectionRequestCallback fun)
         {
             var op = new AddNotifyPeerConnectionRequestOptions
@@ -60,11 +60,11 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
-        /// 短縮 AddNotifyPeerConnectionClosed
+        /// Short AddNotifyPeerConnectionClosed
         /// </summary>
         /// <param name="p2p">P2PInterface</param>
-        /// <param name="socketName">ソケット名</param>
-        /// <param name="localUserId">ログインユーザーID</param>
+        /// <param name="socketName">Socket name</param>
+        /// <param name="localUserId">Login user id</param>
         public static void AddNotifyPeerConnectionClosed(this P2PInterface p2p, string socketName, ProductUserId localUserId, OnRemoteConnectionClosedCallback fun)
         {
             var op = new AddNotifyPeerConnectionClosedOptions
@@ -80,12 +80,12 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
-        /// 短縮 AcceptConnection
+        /// Short AcceptConnection
         /// </summary>
         /// <param name="p2p">P2PInterface</param>
-        /// <param name="localUserId">ログインユーザーID</param>
-        /// <param name="remoteUserId">送信元ユーザーID</param>
-        /// <param name="socketName">ソケット名</param>
+        /// <param name="localUserId">Self user id</param>
+        /// <param name="remoteUserId">Send from user id</param>
+        /// <param name="socketName">Socket name</param>
         public static void AcceptConnection(this P2PInterface p2p, ProductUserId localUserId, ProductUserId remoteUserId, string socketName)
         {
             var accOp = new AcceptConnectionOptions
@@ -106,11 +106,11 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
-        /// 短縮 GetNextReceivedPacketSize
+        /// Short GetNextReceivedPacketSize
         /// </summary>
         /// <param name="p2p">P2PInterface</param>
-        /// <param name="localUserId">ログインユーザーID</param>
-        /// <param name="requestedChannel">チャンネルID</param>
+        /// <param name="localUserId">Login user id</param>
+        /// <param name="requestedChannel">channel id</param>
         public static uint GetNextReceivedPacketSize(this P2PInterface p2p, ProductUserId localUserId, byte requestedChannel)
         {
             var sizeOp = new GetNextReceivedPacketSizeOptions
@@ -122,19 +122,19 @@ namespace Oka.EOSExt
             var result = p2p.GetNextReceivedPacketSize(sizeOp, out size);
             if (result != Result.Success)
             {
-                // メッセージが無くてもエラーになるので非表示
+                // It is an error even if there is no message, so it is hidden
                 //Debug.LogError($"error {DebugTools.GetClassMethodName()}:{result}");
             }
             return size;
         }
 
         /// <summary>
-        /// 短縮 ReceivePacket
+        /// Short ReceivePacket
         /// </summary>
         /// <param name="p2p">P2PInterface</param>
-        /// <param name="localUserId">ログインユーザーID</param>
-        /// <param name="maxDataSizeBytes">受信バイトサイズ</param>
-        /// <param name="requestedChannel">チャンネルID</param>
+        /// <param name="localUserId">Login user id</param>
+        /// <param name="maxDataSizeBytes">Maximum received data size</param>
+        /// <param name="requestedChannel">Channel id</param>
         public static (ProductUserId, SocketId, byte, byte[], uint) ReceivePacket(this P2PInterface p2p, ProductUserId localUserId, uint maxDataSizeBytes, byte requestedChannel)
         {
             var op = new ReceivePacketOptions
@@ -144,7 +144,7 @@ namespace Oka.EOSExt
                 RequestedChannel = requestedChannel
             };
 
-            // ※ 配列作っておかないとエラーになる
+            // * An error will occur if the array is null.
             byte[] rawData = new byte[maxDataSizeBytes];
             var result = p2p.ReceivePacket(op, out ProductUserId remoteUserId, out SocketId socketId, out byte channel, ref rawData, out uint outBytesWritten);
             if (result != Result.Success)

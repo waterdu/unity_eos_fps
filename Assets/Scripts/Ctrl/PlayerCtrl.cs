@@ -18,6 +18,10 @@ namespace Oka.App
 
         public static int hp = 0;
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="userId">local user id</param>
         public PlayerCtrl(ProductUserId userId) : base(userId)
         {
             _ins = this;
@@ -38,6 +42,7 @@ namespace Oka.App
         /// </summary>
         protected override void Tick()
         {
+            // Damage manipulate
             if (chr.isDamage)
             {
                 hp--;
@@ -48,6 +53,7 @@ namespace Oka.App
                 chr.DestroyNotNull();
             }
 
+            // Input manipulate
             var isMove = false;
             var chrPos = chr.GetPosition();
             var speed = 5; // TODO Temp

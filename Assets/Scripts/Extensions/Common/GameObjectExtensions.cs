@@ -1,7 +1,10 @@
-﻿using  UnityEngine;
+﻿using UnityEngine;
 
 namespace Oka.Common
 {
+    /// <summary>
+    /// GameObject extensions
+    /// </summary>
     public static class GameObjectExtensions
     {
         /// <summary>

@@ -7,17 +7,17 @@ using Oka.Common;
 namespace Oka.EOSExt
 {
     /// <summary>
-    /// LobbySearch 拡張
+    /// LobbySearch Extensions
     /// </summary>
     public static class LobbySearchExtensions
     {
         /// <summary>
-        /// 短縮 SetParameter
+        /// Short SetParameter
         /// </summary>
         /// <param name="search">LobbySearch</param>
-        /// <param name="key">キー</param>
-        /// <param name="value">値</param>
-        /// <param name="comparisonOp">比較方法</param>
+        /// <param name="key">Key</param>
+        /// <param name="value">Value</param>
+        /// <param name="comparisonOp">Compare option</param>
         public static void SetParameter(this LobbySearch search, string key, AttributeDataValue value, ComparisonOp comparisonOp)
         {
             var attr = new AttributeData();
@@ -36,10 +36,10 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
-        /// 短縮 SetLobbyId
+        /// Short SetLobbyId
         /// </summary>
         /// <param name="search">LobbySearch</param>
-        /// <param name="lobbyId">ロビーID</param>
+        /// <param name="lobbyId">Lobby id</param>
         public static void SetLobbyId(this LobbySearch search, string lobbyId)
         {
             var op = new LobbySearchSetLobbyIdOptions
@@ -54,11 +54,11 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
-        /// 非同期 Find 
+        /// Async Find 
         /// </summary>
         /// <param name="search">LobbySearch</param>
-        /// <param name="localUserId">ログインユーザーID</param>
-        /// <returns>タスク</returns>
+        /// <param name="localUserId">Login user id</param>
+        /// <returns>Task</returns>
         public static async UniTask<LobbySearchFindCallbackInfo> Find(this LobbySearch search, ProductUserId localUserId)
         {
             var op = new LobbySearchFindOptions
@@ -90,17 +90,17 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
-        /// 短縮 GetSearchResultCount
+        /// Short GetSearchResultCount
         /// </summary>
         /// <param name="search">LobbySearch</param>
-        /// <returns>検索件数</returns>
+        /// <returns>Result count</returns>
         public static uint GetSearchResultCount(this LobbySearch search) => search.GetSearchResultCount(new LobbySearchGetSearchResultCountOptions());
 
         /// <summary>
-        /// 短縮 GetSearchResultCount
+        /// Short GetSearchResultCount
         /// </summary>
         /// <param name="search">LobbySearch</param>
-        /// <param name="localUserId">ログインユーザーID</param>
+        /// <param name="localUserId">Login user id</param>
         public static LobbyDetails CopySearchResultByIndex(this LobbySearch search, uint lobbyIndex)
         {
             var resOp = new LobbySearchCopySearchResultByIndexOptions

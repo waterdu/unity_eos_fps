@@ -10,7 +10,7 @@ using EOSFps;
 namespace Oka.App
 {
     /// <summary>
-    /// UI
+    /// UI component
     /// </summary>
     public class UI : MonoBehaviour
     {
@@ -31,7 +31,7 @@ namespace Oka.App
         public static bool isLockMouse = true;
 
         /// <summary>
-        /// Start
+        /// First frame
         /// </summary>
         void Start()
         {
@@ -41,7 +41,7 @@ namespace Oka.App
         }
 
         /// <summary>
-        /// Update
+        /// Every frame
         /// </summary>
         void Update()
         {

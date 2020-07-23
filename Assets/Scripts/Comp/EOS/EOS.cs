@@ -40,7 +40,7 @@ namespace EOSCommon
         public static string lobbyId = null;
 
         /// <summary>
-        /// Start
+        /// First frame
         /// </summary>
         void Start()
         {
@@ -51,7 +51,7 @@ namespace EOSCommon
             initializeOptions.ProductVersion = productVersion;
             var result = PlatformInterface.Initialize(initializeOptions);
 
-            // * Unity Editor will not work unless skip AlreadyConfigured.
+            // * Unity Editor becomes AlreadyConfigured after the second time.
             if (result == Result.Success
 #if UNITY_EDITOR
                 || result == Result.AlreadyConfigured
@@ -96,8 +96,8 @@ namespace EOSCommon
         /// </summary>
         void OnApplicationQuit()
         {
+            // * Does not work properly in Unity Editor.
 #if !UNITY_EDITOR
-            // * TODO Does not work properly in Unity Editor.
             m_platformInterface?.Release();
             m_platformInterface = null;
             PlatformInterface.Shutdown();
