@@ -7,6 +7,7 @@ using Oka.Common;
 using Oka.EOSExt;
 using UnityEngine;
 using UnityEngine.Networking;
+using Epic.OnlineServices;
 
 namespace EOSFps
 {
@@ -128,47 +129,39 @@ namespace EOSFps
         {
             var lobby = EOS.lobby;
 
+            var search = lobby.CreateLobbySearch(1);
+            if (search == null)
+            {
+                return;
+            }
 
-            // Get Lobby ID 
-            // TODO Lobby search on EOS is not working properly.
-            EOS.lobbyId = await _GetLobbyId();
+            search.SetParameter("name", true, ComparisonOp.Equal);
 
             var isJoinLobby = false;
-            if (EOS.lobbyId.NotEmpty())
+            var result = await search.Find(PlayerCtrl.userId);
+            if (result != null)
             {
-                var search = lobby.CreateLobbySearch(1);
-                if (search == null)
+                var count = search.GetSearchResultCount();
+                if (count > 0)
                 {
-                    return;
-                }
+                    isJoinLobby = true;
 
-                //search.SetParameter("name", true, ComparisonOp.Equal);
-                search.SetLobbyId(EOS.lobbyId);
-
-                var result = await search.Find(PlayerCtrl.userId);
-                if (result != null)
-                {
-                    var count = search.GetSearchResultCount();
-                    if (count > 0)
+                    var detail = search.CopySearchResultByIndex(0);
+                    var info = await lobby.JoinLobby(detail, PlayerCtrl.userId);
+                    if (info != null)
                     {
-                        isJoinLobby = true;
-
-                        var detail = search.CopySearchResultByIndex(0);
-                        var info = await lobby.JoinLobby(detail, PlayerCtrl.userId);
-                        if (info != null)
+                        EOS.lobbyId = info.LobbyId;
+                        foreach (var userId in detail.GetMembers())
                         {
-                            foreach (var userId in detail.GetMembers())
+                            if (userId.InnerHandle != PlayerCtrl.userId.InnerHandle)
                             {
-                                if (userId.InnerHandle != PlayerCtrl.userId.InnerHandle)
-                                {
-                                    Ctrl.GenerateNetCtrl(userId);
-                                }
+                                Ctrl.GenerateNetCtrl(userId);
                             }
                         }
-                        else
-                        {
-                            Debug.LogError("Error join lobby");
-                        }
+                    }
+                    else
+                    {
+                        Debug.LogError("Error join lobby");
                     }
                 }
             }
@@ -198,9 +191,10 @@ namespace EOSFps
             // TODO : Lobby search is not working. No need to add.
             handle.AddAttribute("name", true, LobbyAttributeVisibility.Public);
 
-            EOS.lobbyId = result.LobbyId;
+            var info = await lobby.UpdateLobby(handle);
+
+            EOS.lobbyId = info.LobbyId;
             Debug.LogError("lobbyId:" + EOS.lobbyId);
-            await _SendLobbyId(EOS.lobbyId);
         }
 
         /// <summary>
@@ -237,48 +231,6 @@ namespace EOSFps
                 Debug.LogError($"Closed:Local:{e.RemoteUserId.InnerHandle} Remote:{e.RemoteUserId.InnerHandle} Player:{PlayerCtrl.userId.InnerHandle}");
                 Ctrl.RequestDestroy(e.RemoteUserId);
             });
-        }
-
-
-        /// <summary>
-        /// Send Lobby Id To Tempolary Server
-        /// </summary>
-        /// <returns>Task</returns>
-        /// <param name="lobbyId">lobby id</param>
-        async UniTask _SendLobbyId(string lobbyId)
-        {
-            var form = new WWWForm();
-            form.AddField("v", lobbyId);
-            using (var req = UnityWebRequest.Post($"{EOS.apiUrl}?secret={EOS.apiSecret}", form))
-            {
-                try
-                {
-                    await req.SendWebRequest();
-                }
-                catch (UnityWebRequestException)
-                {
-                }
-            }
-        }
-
-        /// <summary>
-        /// Get Lobby Id From Tempolary Server
-        /// </summary>
-        /// <returns>Task</returns>
-        async UniTask<string> _GetLobbyId()
-        {
-            using (var req = UnityWebRequest.Get($"{EOS.apiUrl}?secret={EOS.apiSecret}"))
-            {
-                try
-                {
-                    await req.SendWebRequest();
-                    return req.downloadHandler?.text;
-                }
-                catch (UnityWebRequestException)
-                {
-                }
-                return null;
-            }
         }
     }
 }

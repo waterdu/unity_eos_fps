@@ -72,6 +72,37 @@ namespace Oka.EOSExt
         }
 
         /// <summary>
+        /// Async UpdateLobby
+        /// </summary>
+        /// <param name="lobby">LobbyInterface</param>
+        /// <param name="lobbyModificationHandle">Modify handle</param>
+        /// <returns>Task</returns>
+        public static async UniTask<UpdateLobbyCallbackInfo> UpdateLobby(this LobbyInterface lobby, LobbyModification lobbyModificationHandle)
+        {
+            var op = new UpdateLobbyOptions
+            {
+                LobbyModificationHandle = lobbyModificationHandle,
+            };
+
+            UpdateLobbyCallbackInfo info = null;
+            lobby.UpdateLobby(op, null, e =>
+            {
+                info = e;
+            });
+            while (info == null)
+            {
+                await UniTask.NextFrame();
+            }
+
+            if (info.ResultCode == Result.Success)
+            {
+                return info;
+            }
+            Debug.LogError($"error {DebugTools.GetClassMethodName()}:{info.ResultCode}");
+            return null;
+        }
+
+        /// <summary>
         /// Short UpdateLobbyModification
         /// </summary>
         /// <param name="lobby">LobbyInterface</param>

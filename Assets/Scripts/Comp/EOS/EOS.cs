@@ -34,8 +34,6 @@ namespace EOSCommon
         public static string deploymentId => _ins.settings.deploymentId;
         public static string socketName => _ins.settings.socketName;
         public static byte channelId => _ins.settings.channelId;
-        public static string apiUrl => _ins.settings.apiUrl;
-        public static string apiSecret => _ins.settings.apiSecret;
 
         public static string lobbyId = null;
 

@@ -19,9 +19,5 @@ namespace EOSCommon
         [Header("P2P")]
         public string socketName = "P2PSocket";
         public byte channelId = 1;
-
-        [Header("Temporary lobby server")]
-        public string apiUrl;
-        public string apiSecret;
     }
 }
